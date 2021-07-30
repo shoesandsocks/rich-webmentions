@@ -23,7 +23,8 @@ app.post("/webmention", async (req, res) => {
   const wm = await wmverifier(source, target, ACCEPTABLE_HOSTS);
   if (wm.statusCode == 200) {
     res.sendStatus(202);
-    client.db("blogStuff").collection("webmentions").insertOne(wm);
+    const coll = await client.db("blogStuff").collection("webmentions");
+    coll.insertOne(wm);
     return;
   }
   return res.status(wm.statusCode).send(wm.body);
