@@ -9,4 +9,6 @@ const uri = `mongodb://${MONGO_USER}:${MONGO_PW}@${domain}/colorshare?authSource
 
 const client = new MongoClient(uri);
 
+await client.connect();
+
 export default client;
