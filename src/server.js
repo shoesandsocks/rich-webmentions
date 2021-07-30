@@ -3,7 +3,6 @@ import wmverifier from "webmention-verifier";
 import { config } from "dotenv";
 config();
 
-import processWebmention from "./processWebmention.js";
 import client from "./database.js";
 
 const { PORT, ACCEPTABLE_HOSTS } = process.env;
@@ -16,7 +15,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.json({ message: "this is the webmentions server" });
+  res.send("This is the webmention server for www.rich-text.net.");
 });
 
 app.post("/webmention", async (req, res) => {
@@ -24,7 +23,7 @@ app.post("/webmention", async (req, res) => {
   const wm = await wmverifier(source, target, ACCEPTABLE_HOSTS);
   if (wm.statusCode == 200) {
     res.sendStatus(202);
-    processWebmention(wm);
+    client.db("blogStuff").collection("webmentions").insertOne(wm);
     return;
   }
   return res.status(wm.statusCode).send(wm.body);
