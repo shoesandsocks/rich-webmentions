@@ -1,9 +1,10 @@
 import client from "./database.js";
 
 async function saveObject(obj) {
+  console.log(JSON.stringify(obj, null, 4));
   const mentionsColl = await client.db("blogStuff").collection("webmentions");
   const operation = await mentionsColl.insertOne(obj);
-  console.log(`db operation complete: ${operation}`);
+  console.log(`db operation complete: ${JSON.stringify(operation, null, 2)}`);
   return;
 }
 
