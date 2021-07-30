@@ -4,7 +4,7 @@ import { config } from "dotenv";
 config();
 
 import processWebmention from "./processWebmention.js";
-import { client } from "./database.js";
+import client from "./database.js";
 
 const { PORT, ACCEPTABLE_HOSTS } = process.env;
 const app = Express();
