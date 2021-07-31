@@ -24,7 +24,7 @@ app.post("/webmention", async (req, res) => {
   if (wm.statusCode == 200) {
     res.sendStatus(202);
     const coll = await client.db("blogStuff").collection("webmentions");
-    coll.insertOne(wm);
+    coll.insertOne(wm.webmention); // don't save the whole object from wmverifier, just the mention
     return;
   }
   return res.status(wm.statusCode).send(wm.body);
