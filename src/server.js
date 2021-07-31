@@ -4,8 +4,9 @@ import { config } from "dotenv";
 config();
 
 import client from "./database.js";
+import msg from "./notify.js";
 
-const { PORT, ACCEPTABLE_HOSTS } = process.env;
+const { PORT, ACCEPTABLE_HOSTS, NOTIFY_URL } = process.env;
 const app = Express();
 
 app.use(
@@ -25,7 +26,7 @@ app.post("/webmention", async (req, res) => {
     res.sendStatus(202);
     const coll = await client.db("blogStuff").collection("webmentions");
     coll.insertOne(wm.webmention); // don't save the whole object from wmverifier, just the mention
-    return;
+    return msg(NOTIFY_URL, "new webmention; run ./scripts/rebuild to set.");
   }
   return res.status(wm.statusCode).send(wm.body);
 });
