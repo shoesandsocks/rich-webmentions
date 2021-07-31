@@ -1,3 +1,5 @@
+import fetch from "node-fetch";
+
 const msg = (url, text) => {
   fetch(url, {
     method: "POST",
