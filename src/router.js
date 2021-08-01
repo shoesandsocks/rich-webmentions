@@ -10,9 +10,7 @@ const r = Router();
 r.get("/", (req, res) => {
   res.send("This is the webmention server for www.rich-text.net.");
 });
-r.post("/discord-interaction", async (req, res) => {
-  console.log(req.params);
-});
+
 r.post("/webmention", async (req, res) => {
   const { source, target } = req.body;
   const wm = await wmverifier(source, target, ACCEPTABLE_HOSTS);
