@@ -8,15 +8,12 @@ const msg = (url, text) => {
     headers: { "Content-Type": "application/json" },
   })
     .then(() => {
-      exec(
-        "cd /blog-folder/blog-mega-archive/scripts && ./rebuild.sh",
-        (err, stdout, stderr) => {
-          if (err) return console.error(err);
-          console.log(`stdout: ${stdout}`);
-          console.log(`stderr: ${stderr}`);
-          return;
-        }
-      );
+      exec(process.env.REBUILD_COMMAND, (err, stdout, stderr) => {
+        if (err) return console.error(err);
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+        return;
+      });
     })
     .catch((err) => console.log(err));
 };
