@@ -1,3 +1,6 @@
+import { config } from "dotenv";
+config();
+
 // https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/
 import client from "./database.js";
 
