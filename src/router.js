@@ -12,15 +12,23 @@ r.get("/", (req, res) => {
 });
 
 r.post("/webmention", async (req, res) => {
-  const { source, target } = req.body;
-  const wm = await wmverifier(source, target, ACCEPTABLE_HOSTS);
-  if (wm.statusCode == 200) {
-    res.sendStatus(202);
-    const coll = await client.db("blogStuff").collection("webmentions");
-    coll.insertOne(wm.webmention); // don't save the whole object from wmverifier, just the mention
-    return msg(NOTIFY_URL, "new webmention; run ./scripts/rebuild to set.");
+  try {
+    const { source, target } = req.body;
+    const wm = await wmverifier(source, target, ACCEPTABLE_HOSTS);
+    if (wm.statusCode == 200) {
+      res.sendStatus(202);
+      const coll = await client.db("blogStuff").collection("webmentions");
+      coll.insertOne(wm.webmention); // don't save the whole object from wmverifier, just the mention
+      return msg(NOTIFY_URL, "new webmention; run ./scripts/rebuild to set.");
+    }
+    res.status(wm.statusCode).send(wm.body);
+    return msg(
+      NOTIFY_URL,
+      `webmention failed (but didn't throw): ${JSON.stringify(wm, null, 4)}`
+    );
+  } catch (error) {
+    return msg(NOTIFY_URL, error);
   }
-  return res.status(wm.statusCode).send(wm.body);
 });
 
 export default r;
