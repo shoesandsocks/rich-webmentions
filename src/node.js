@@ -1,5 +1,5 @@
-import { config } from "dotenv";
-config();
+// index.mjs (ESM)
+import "dotenv/config"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 
 // https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/
 import client from "./database.js";

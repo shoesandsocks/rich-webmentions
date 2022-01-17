@@ -4,7 +4,7 @@ import client from "./database.js";
 import msg from "./notify.js";
 
 const { ACCEPTABLE_HOSTS, NOTIFY_URL } = process.env;
-
+console.log(ACCEPTABLE_HOSTS, NOTIFY_URL);
 const r = Router();
 
 r.get("/", (req, res) => {
