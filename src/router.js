@@ -3,8 +3,8 @@ import wmverifier from "webmention-verifier";
 import client from "./database.js";
 import msg from "./notify.js";
 
-const { ACCEPTABLE_HOSTS, NOTIFY_URL } = process.env;
-console.log(ACCEPTABLE_HOSTS, NOTIFY_URL);
+const { NOTIFY_URL } = process.env;
+// const { ACCEPTABLE_HOSTS, NOTIFY_URL } = process.env;
 const r = Router();
 
 r.get("/", (req, res) => {
@@ -14,7 +14,8 @@ r.get("/", (req, res) => {
 r.post("/webmention", async (req, res) => {
   try {
     const { source, target } = req.body;
-    const wm = await wmverifier(source, target, ACCEPTABLE_HOSTS);
+    const wm = await wmverifier(source, target);
+    // const wm = await wmverifier(source, target, ACCEPTABLE_HOSTS);
     if (wm.statusCode == 200) {
       res.sendStatus(202);
       const coll = await client.db("blogStuff").collection("webmentions");
@@ -24,7 +25,7 @@ r.post("/webmention", async (req, res) => {
     res.status(wm.statusCode).send(wm.body);
     return msg(
       NOTIFY_URL,
-      `webmention failed (but didn't throw): ${JSON.stringify(wm, null, 4)}`
+      `webmention failed (but didn't throw). Verifier says: "${wm.body}" Source was "${source}", target was "${target}"`
     );
   } catch (error) {
     return msg(NOTIFY_URL, error);
