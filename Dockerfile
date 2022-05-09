@@ -6,4 +6,4 @@ COPY --chown=node:node . .
 RUN npm ci --only=production
 EXPOSE 3154
 USER node
-CMD [ "dumb-init", "node", "./src/server.js" ]
+CMD [ "dumb-init", "node", "./src/webmention-server.js" ]
